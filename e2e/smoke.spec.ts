@@ -14,7 +14,8 @@ test("the root page loads at the base URL @smoke", async ({ page }) => {
 test("root page loads 200 and shows a list or `No tasks yet.` @smoke", async ({ page }) => {
   const response = await page.goto("/");
   expect(response?.status()).toBe(200);
-  await expect(page.getByRole("list").or(page.getByText("No tasks yet."))).not.toHaveCount(0);
+  const main = page.getByRole("main");
+  await expect(main.getByRole("list", { name: "Tasks" }).or(main.getByText("No tasks yet."))).not.toHaveCount(0);
 });
 
 test("a task added through the form survives a reload @smoke @writes", async ({ page }) => {
