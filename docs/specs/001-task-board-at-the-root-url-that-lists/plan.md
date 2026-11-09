@@ -31,6 +31,7 @@ tasks:
     covers: [AC-001.1, AC-001.2, AC-001.3, AC-001.4, AC-001.6, AC-001.7]
     parallel_safe: true
     depends_on: [t1]
+    done: true
   - id: t5
     title: Root page renders the board; remove the starter page; smoke tests
     files: [app/page.tsx, app/_components/feature-card.tsx, app/_components/icons.tsx, tests/page.test.tsx, e2e/home.spec.ts, e2e/smoke.spec.ts]
