@@ -60,6 +60,17 @@ describe("listTasks", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it("AC-001.5 limits GET /tasks to 5 seconds with AbortSignal.timeout(5000)", async () => {
+    const timeoutSpy = vi.spyOn(AbortSignal, "timeout");
+    const fetchMock = vi.fn().mockResolvedValue(json(TASKS));
+    vi.stubGlobal("fetch", fetchMock);
+    const { listTasks } = await load();
+    await listTasks();
+    expect(timeoutSpy).toHaveBeenCalledTimes(1);
+    expect(timeoutSpy).toHaveBeenCalledWith(5000);
+    expect(fetchMock.mock.calls[0][1].signal).toBe(timeoutSpy.mock.results[0].value);
+  });
+
   it("AC-001.5 fails when the API is unreachable, times out or answers 5xx", async () => {
     const { listTasks } = await load();
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("fetch failed")));
@@ -102,6 +113,17 @@ describe("createTask", () => {
     const { createTask } = await load();
     await createTask({ title: "x", due_date: null });
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ title: "x", due_date: null });
+  });
+
+  it("AC-001.6 limits POST /tasks to 5 seconds with AbortSignal.timeout(5000)", async () => {
+    const timeoutSpy = vi.spyOn(AbortSignal, "timeout");
+    const fetchMock = vi.fn().mockResolvedValue(json({ id: "9", title: "x", due_date: null }, 201));
+    vi.stubGlobal("fetch", fetchMock);
+    const { createTask } = await load();
+    await createTask({ title: "x", due_date: null });
+    expect(timeoutSpy).toHaveBeenCalledTimes(1);
+    expect(timeoutSpy).toHaveBeenCalledWith(5000);
+    expect(fetchMock.mock.calls[0][1].signal).toBe(timeoutSpy.mock.results[0].value);
   });
 
   it("AC-001.6 fails on anything but 201, unreachable API, timeout or unset URL", async () => {
