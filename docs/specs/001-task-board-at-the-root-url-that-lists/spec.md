@@ -1,7 +1,7 @@
 ---
 spec_id: 001-task-board-at-the-root-url-that-lists
 title: Task board at the root URL that lists all tasks and adds new ones
-status: approved
+status: building
 priority: P1
 shape: web-nextjs
 parent: ika100-demo/taskboard8-gitops:001-persistent-tasks-and-web-task-board
@@ -132,3 +132,4 @@ Document `TASK_API_URL` in docs/env-vars.md (server-only; never `NEXT_PUBLIC_`).
 
 - 2026-11-10 created from the system plan, with its criteria (spec 147)
 - 2026-11-10 approved
+- 2026-11-10 building
