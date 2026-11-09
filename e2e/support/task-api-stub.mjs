@@ -85,4 +85,9 @@ const server = createServer(async (req, res) => {
   return send(res, 404, { detail: "not found" });
 });
 
-server.listen(port, "127.0.0.1");
+server.listen(port, "127.0.0.1", () => console.log(`task-api-stub listening on 127.0.0.1:${port}`));
+
+process.on("SIGTERM", () => {
+  server.closeAllConnections();
+  server.close(() => process.exit(0));
+});
