@@ -17,6 +17,7 @@ tasks:
     covers: [AC-001.1, AC-001.3, AC-001.5, AC-001.6]
     parallel_safe: true
     depends_on: []
+    done: true
   - id: t3
     title: POST /api/tasks proxy route
     files: [app/api/tasks/route.ts]
