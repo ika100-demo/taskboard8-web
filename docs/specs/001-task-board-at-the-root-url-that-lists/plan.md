@@ -38,6 +38,7 @@ tasks:
     covers: [AC-001.1, AC-001.2, AC-001.5, AC-001.7]
     parallel_safe: true
     depends_on: [t1, t4]
+    done: true
 ---
 
 # Plan — 001 Task board at the root URL that lists all tasks and adds new ones
