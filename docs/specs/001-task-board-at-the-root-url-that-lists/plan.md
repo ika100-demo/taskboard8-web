@@ -10,6 +10,7 @@ tasks:
     covers: [AC-001.1, AC-001.3, AC-001.4, AC-001.5, AC-001.6]
     parallel_safe: true
     depends_on: []
+    done: true
   - id: t2
     title: E2E harness - stub Task API and Playwright wiring
     files: [e2e/support/task-api-stub.mjs, e2e/support/stub-client.ts, playwright.config.ts]
