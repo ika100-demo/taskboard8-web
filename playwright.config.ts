@@ -25,9 +25,9 @@ export default defineConfig({
         workers: 1,
         webServer: [
           {
-            command: "node e2e/support/task-api-stub.mjs",
+            command: `"${process.execPath}" e2e/support/task-api-stub.mjs`,
             url: `http://127.0.0.1:${stubPort}/__stub/health`,
-            reuseExistingServer: !process.env.CI,
+            reuseExistingServer: false,
             timeout: 30_000,
           },
           {
