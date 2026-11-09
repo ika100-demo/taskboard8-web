@@ -5,8 +5,15 @@ function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
 }
 
+// Loaded through a variable so tsc does not check the page's current shape.
+const target: string = "@/app/page";
+
+async function loadPage() {
+  return await import(/* @vite-ignore */ target);
+}
+
 async function renderPage() {
-  const { default: HomePage } = await import("@/app/page");
+  const { default: HomePage } = await loadPage();
   render(await HomePage());
 }
 
@@ -23,7 +30,7 @@ afterEach(() => {
 
 describe("HomePage", () => {
   it("AC-001.1 is rendered on every request, never prerendered or cached", async () => {
-    const page = await import("@/app/page");
+    const page = await loadPage();
     expect(page.dynamic).toBe("force-dynamic");
   });
 

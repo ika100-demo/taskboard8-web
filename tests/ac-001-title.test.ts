@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 
+// Loaded through a variable so tsc (and next build) do not need the module to exist yet.
+const target: string = "@/app/_lib/title";
+
 async function load() {
-  return await import("@/app/_lib/title");
+  return await import(/* @vite-ignore */ target);
 }
 
 describe("validateTitle", () => {

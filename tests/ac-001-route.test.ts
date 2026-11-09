@@ -12,8 +12,11 @@ function post(body: unknown): Request {
   });
 }
 
+// Loaded through a variable so tsc (and next build) do not need the module to exist yet.
+const target: string = "@/app/api/tasks/route";
+
 async function load() {
-  return await import("@/app/api/tasks/route");
+  return await import(/* @vite-ignore */ target);
 }
 
 let fetchMock: ReturnType<typeof vi.fn>;

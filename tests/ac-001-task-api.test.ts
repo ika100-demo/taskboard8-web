@@ -9,8 +9,11 @@ function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
 }
 
+// Loaded through a variable so tsc (and next build) do not need the module to exist yet.
+const target: string = "@/app/_lib/task-api";
+
 async function load() {
-  return await import("@/app/_lib/task-api");
+  return await import(/* @vite-ignore */ target);
 }
 
 beforeEach(() => {

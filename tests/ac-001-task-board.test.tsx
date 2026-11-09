@@ -8,7 +8,9 @@ function json(body: unknown, status = 200): Response {
 }
 
 async function renderBoard(props: { initialTasks?: { id: string; title: string; due_date: string | null }[]; loadFailed?: boolean } = {}) {
-  const { TaskBoard } = await import("@/app/_components/task-board");
+  // Loaded through a variable so tsc (and next build) do not need the module to exist yet.
+  const target: string = "@/app/_components/task-board";
+  const { TaskBoard } = await import(/* @vite-ignore */ target);
   render(<TaskBoard initialTasks={props.initialTasks ?? []} loadFailed={props.loadFailed ?? false} />);
 }
 
