@@ -11,19 +11,32 @@ function freePort(): string {
   return execFileSync(process.execPath, ["-e", script], { encoding: "utf8" }).trim();
 }
 if (!smokeBaseUrl && !process.env.E2E_PORT) process.env.E2E_PORT = process.env.PORT || freePort();
+if (!smokeBaseUrl && !process.env.TASK_API_STUB_PORT) process.env.TASK_API_STUB_PORT = freePort();
 const port = process.env.E2E_PORT;
+const stubPort = process.env.TASK_API_STUB_PORT;
+// The app and the tests both read the stub's address from TASK_API_URL (spec 001).
+if (!smokeBaseUrl) process.env.TASK_API_URL = `http://127.0.0.1:${stubPort}`;
 
 export default defineConfig({
   testDir: "./e2e",
   ...(smokeBaseUrl
     ? {}
     : {
-        webServer: {
-          command: `pnpm build && pnpm exec next start --port ${port}`,
-          url: `http://localhost:${port}/api/health`,
-          reuseExistingServer: !process.env.CI,
-          timeout: 120_000,
-        },
+        workers: 1,
+        webServer: [
+          {
+            command: "node e2e/support/task-api-stub.mjs",
+            url: `http://127.0.0.1:${stubPort}/__stub/health`,
+            reuseExistingServer: !process.env.CI,
+            timeout: 30_000,
+          },
+          {
+            command: `pnpm build && pnpm exec next start --port ${port}`,
+            url: `http://localhost:${port}/api/health`,
+            reuseExistingServer: !process.env.CI,
+            timeout: 120_000,
+          },
+        ],
       }),
   use: { baseURL: smokeBaseUrl || `http://localhost:${port}` },
 });
