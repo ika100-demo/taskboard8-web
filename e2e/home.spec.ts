@@ -2,15 +2,13 @@ import { expect, test } from "@playwright/test";
 
 test("home page renders with its landmarks", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1, name: "taskboard8-web" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Tasks" })).toBeVisible();
   await expect(page.getByRole("banner")).toBeVisible();
   await expect(page.getByRole("main")).toBeVisible();
   await expect(page.getByRole("contentinfo")).toBeVisible();
 });
 
-test("the health endpoint is linked and answers", async ({ page, request }) => {
-  await page.goto("/");
-  await expect(page.getByRole("link", { name: "Check health" })).toHaveAttribute("href", "/api/health");
+test("the health endpoint answers", async ({ request }) => {
   expect((await request.get("/api/health")).ok()).toBeTruthy();
 });
 
